@@ -157,7 +157,7 @@ contract OriginsPass is ERC721Enumerable, Ownable {
         return maxNumberOfWhitelistedAddresses;
     }
 
-    function firstRoundMinting(address userAddress) public payable {
+    function mintingRounds(address userAddress) public payable {
         require(block.timestamp >= saleStartTimeStamp, "Sale has not commenced.");
         require(block.timestamp < saleStartTimeStamp + 1 days, "First minting session has ended.");
         require(verifyWhitelistUser(userAddress), "user is not whitelisted");
@@ -166,17 +166,6 @@ contract OriginsPass is ERC721Enumerable, Ownable {
         firstMintSession[msg.sender] = true;
         originalMinters[msg.sender] = 1;
         _mintTo(msg.sender, 1);
-    }
-
-    function secondRoundMinting(uint256 amount, address userAddress) public payable {
-        require(block.timestamp >= saleStartTimeStamp + 1 days, "Second minting session has not commenced.");
-        require(block.timestamp < saleStartTimeStamp + 2 days, "Second minting session has ended.");
-        require(verifyWhitelistUser(userAddress), "user is not whitelisted");
-        require(secondMintSession[msg.sender].add(amount) <= maxPerMint, "You can only mint 10 in this session");
-
-        secondMintSession[msg.sender] = secondMintSession[msg.sender].add(amount);
-        originalMinters[msg.sender] = originalMinters[msg.sender].add(amount);
-        _mintTo(msg.sender, amount);
     }
 
     function mintOriginsPassPublic(uint256 amount) public payable {
